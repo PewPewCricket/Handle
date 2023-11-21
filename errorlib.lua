@@ -27,21 +27,17 @@ function errorlib.exception(sev, msg, pos)
 
     if sev == 0 then
         printError(os.clock(), ": [WARN] ", msg)
-        return 0
     elseif sev == 1 then
         printError(os.clock(), ": [ERROR] ", msg)
         os.sleep(0.2)
-        return 0
     elseif sev == 2 then
         printError(os.clock(), ": [FATAL] ", msg)
         os.sleep(0.5)
         error(" ", 0, 0)
-        return 0
     elseif sev == 3 then
         printError(os.clock(), ": [FATAL] ", msg)
         os.sleep(0.5)
         errorlib.timedShutdown(10, pos + 2)
-        return 0
     end
 
 end
@@ -49,7 +45,7 @@ end
     
 function errorlib.timedShutdown(time, pos)
     if time > 100 then
-        return -1
+        return false
     end
     
     term.setCursorPos(1, pos)
@@ -66,7 +62,6 @@ function errorlib.timedShutdown(time, pos)
     
     term.clear()
     os.shutdown()
-    return -1
 end
 
 return errorlib
