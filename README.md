@@ -10,9 +10,6 @@ exception(severity, message, position)
   2. message  : **string** the error message you want to display to the screen
   3. position : **number** the line on which you want to print the error
 
-  Returns
-  Nothing
-
 timedShutdown(time, position)
   Parameters
   1. time     : **number** the amount of time until shutdown
