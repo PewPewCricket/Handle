@@ -5,6 +5,7 @@ errorlib is a library for ComputerCraft that allows for better handling fo shutd
 List of functions:
 
 exception(severity, message, position)
+  
   Parameters
   1. severity : **number** the severity of the error. 0 is a warning, 1 is an error, 2 is an error that casues program to terminate, 3 is an error that causes computer to shutdown.
   2. message  : **string** the error message you want to display to the screen
@@ -12,6 +13,7 @@ exception(severity, message, position)
 
 
 timedShutdown(time, position)
+  
   Parameters
   1. time     : **number** the amount of time until shutdown
   2. position : **number** the line on which you want to print the shutdown timer
