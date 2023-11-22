@@ -1,4 +1,5 @@
--- error lib is a library for handling errors and shutdowns! It includes a list of functions for you to use, go to the github: _ for documentation.
+-- PewPewCricket
+-- error lib is a library for handling errors and shutdowns! It includes a list of functions for you to use, go to the github: https://github.com/PewPewCricket/cc-handle/ for documentation.
 
 local handle = {}
 do
@@ -57,7 +58,7 @@ function handle.exception(sev, msg, pos)
         handle.log(msg, sev + 1)
         error(" ", 0)
     elseif sev == 3 then
-        printError("Fatal error, shutting down computer!"
+        printError("Fatal error, shutting down computer!")
         handle.log(msg, sev + 1)
         handle.timedShutdown(10, pos + 2)
     end
@@ -89,5 +90,3 @@ function handle.timedShutdown(time, pos)
 end
 
 return handle
-
--- by PewPewCricket
