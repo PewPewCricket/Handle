@@ -1,7 +1,7 @@
 -- Handle is a library that makes logging as easy as calling a function! It includes a list of functions for you to use, go to the github: _____ for documentation.
 
 --  TODO:
--- v0.2.1 WIP cleanup
+-- v0.2.1 WIP: cleanup
 
 local handle = {}
 
