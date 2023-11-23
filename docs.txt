@@ -1,0 +1,43 @@
+DOCUMENTATION:
+
+list of functions:
+
+setLogDebug(active)
+  Set if debug events will be reported in the log file.
+  INPUTS:
+    1. isDebug: BOOLEAN, Should debug events be reported in log?
+
+setLogLocation(loc)
+  Change where log events are written to.
+  INPUTS:
+    1. loc: STRING, the absolute path of where logs should be written to
+
+log(msg, debug)
+  Write something to the log file.
+  INPUTS:
+    1. msg: STRING, the message you want to write to the log file.
+    2. debug: BOOLEAN, Is the log message going to be of type debug? If no then type will be set to info.
+
+  RETURNS:
+    1. Returns -1 if debug = true while debug events are set to not be logged.
+
+exception(msg, sev)
+  INPUTS:
+    1. msg: STRING, the message you want to write to the log file.
+    2. sev: NUMBER, the severity of the exception, here is a list of the valid values and what they do:
+      0: Writes the message to the log with type warn.
+      1: Writes the message to the log with type error.
+      2. Writes the message to the log with type fatal and crashes the program.
+
+  RETURNS:
+    Returns -1 if sev is set to an invalid number.
+
+  timedShutdown(time)
+    Preforms a computer shutdown in a set amount of time and displays the countdown on screen.
+    INPUTS:
+      1. time: NUMBER, the amount of time until the computer shuts down.
+
+    RETURNS:
+      1. Returns -1 if time is above 100.
+
+END OF DOCUMENTATION
