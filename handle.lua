@@ -1,88 +1,93 @@
--- PewPewCricket
--- error lib is a library for handling errors and shutdowns! It includes a list of functions for you to use, go to the github: https://github.com/PewPewCricket/cc-handle/ for documentation.
+-- Handle is a library that makes logging as easy as calling a function! It includes a list of functions for you to use, go to the github: _____ for documentation.
+
+--  TODO:
+-- v0.2.1 WIP cleanup
 
 local handle = {}
-do
-	local globaltbl = _G
-	local newenv = setmetatable({}, {
-		__index = function (t, k)
-			local v = handle[k]
-			if v == nil then return globaltbl[k] end
-			return v
-		end,
-		__newindex = handle,
-	})
-	if setfenv then
-		setfenv(1, newenv) -- for 5.1
-	else
-		_ENV = newenv -- for 5.2
-	end
-end
+
+-- variables used accross many functions:
+
+local size_x, size_y = term.getSize()
+local logLoc = nil
+local isDebug = false
 
 
 -- functions: 
 
+function handle.setLogDebug(boolean)
+    isDebug = boolean
+end
+
+function handle.setLogLocation(loc)
+    if fs.exists(loc) == false then
+        local file = fs.open(loc, "w")
+        file.writeLine("This log was created by Handle, a logging library.")
+        file.close()
+    end
+
+    logLoc = loc
+end
+
 function handle.log(msg, type)
     local logType = nil
 
-    if type == 0 then
-        logType = " [INFO]   "
+    if type == 0 and isDebug == true then
+        logType = ": [DEBUG] "
     elseif type == 1 then
-        logType = " [WARN]   "
-    elseif type == 2 then
-        logType = " [ERROR]  "
-    elseif type == 3 then
-        logType = " [FATAL]  "
-    elseif type == 4 then
-        logType = " [!FATAL] "
+        logType = ": [INFO]  "
     else
         return -1
     end
 
-    local file = fs.open("/logs/latest.log", "a")
-    file.writeLine(os.date() .. logType .. msg)
+    local file = fs.open(logLoc, "a")
+    file.writeLine("[" .. os.date("%T", os.epoch("utc") / 1000) .. (" %03d]"):format(os.epoch("utc") % 1000):gsub("%.", " ") .. logType .. msg)
     file.close()
     return 1
 end
 
 
-function handle.exception(sev, msg, pos)
-    os.sleep(0.5)
-    term.setCursorPos(1, pos)
+function handle.exception(msg, sev)
+    local x, y = term.getCursorPos()
+    
     if sev == 0 then
-        handle.log(msg, sev + 1)
+        local file = fs.open(logLoc, "a")
+        file.writeLine("[" .. os.date("%T", os.epoch("utc") / 1000) .. (" %03d]"):format(os.epoch("utc") % 1000):gsub("%.", " ") .. ": [WARN]  " .. msg)
+        file.close()
     elseif sev == 1 then
-        handle.log(msg, sev + 1)
+        local file = fs.open(logLoc, "a")
+        file.writeLine("[" .. os.date("%T", os.epoch("utc") / 1000) .. (" %03d]"):format(os.epoch("utc") % 1000):gsub("%.", " ") .. ": [ERROR] " .. msg)
+        file.close()
     elseif sev == 2 then
-        printError("Crashed! Check log for more info!")
-        handle.log(msg, sev + 1)
+        term.setCursorPos(x ,y)
+        write("Program Crashed! Check log for more info!")
+        local file = fs.open(logLoc, "a")
+        file.writeLine("[" .. os.date("%T", os.epoch("utc") / 1000) .. (" %03d]"):format(os.epoch("utc") % 1000):gsub("%.", " ") .. ": [FATAL] " .. msg)
+        file.close()
         error(" ", 0)
-    elseif sev == 3 then
-        printError("Fatal error, shutting down computer!")
-        handle.log(msg, sev + 1)
-        handle.timedShutdown(10, pos + 2)
+    else
+        return -1
     end
 
     return 1
 end
     
     
-function handle.timedShutdown(time, pos)
+function handle.timedShutdown(time)
     if time > 100 then
-        return false
+        return -1
     end
     
     handle.log("Shutdown Command Issued in " .. time .. " seconds.", 1)
-    term.setCursorPos(1, pos)
     write("Shutting down in: ")
-        
+    local x, y = term.getCursorPos()
+
     while time > 0 do
         write(time)
         time = time - 1
         os.sleep(1)
-        term.setCursorPos(19, pos)
+        term.setCursorPos(x, y)
         write("   ")
-        term.setCursorPos(19, pos)
+        term.setCursorPos(x, y)
     end
     
     term.clear()
@@ -90,3 +95,5 @@ function handle.timedShutdown(time, pos)
 end
 
 return handle
+
+-- by PewPewCricket
